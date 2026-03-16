@@ -88,8 +88,15 @@ namespace KaitoKid.ArchipelagoUtilities.Net.Client
                 InitSession(connectionInfo);
                 var itemsHandling = ItemsHandlingFlags.AllItems;
                 var apVersion = new Version(0, 6, 1);
-                var tags = connectionInfo.DeathLink == true ? new[] { "AP", "DeathLink" } : new[] { "AP" };
-                result = _session.TryConnectAndLogin(GameName, _connectionInfo.SlotName, itemsHandling, apVersion, tags, null, _connectionInfo.Password);
+                var tags = new List<string> { "AP" };
+                if (connectionInfo.DeathLink == true)
+                {
+                    tags.Add("DeathLink");
+                }
+
+                tags.AddRange(connectionInfo.ConnectionTags ?? new List<string>());
+                tags = tags.Distinct().ToList();
+                result = _session.TryConnectAndLogin(GameName, _connectionInfo.SlotName, itemsHandling, apVersion, tags.ToArray(), null, _connectionInfo.Password);
             }
             catch (Exception e)
             {
@@ -1052,17 +1059,52 @@ namespace KaitoKid.ArchipelagoUtilities.Net.Client
 
         private void EnableMoveLink()
         {
+            EnableTag(MOVE_LINK_TAG);
+        }
+
+        public void EnableTag(string tag)
+        {
             if (!MakeSureConnected())
             {
                 return;
             }
 
-            if (Array.IndexOf(_session.ConnectionInfo.Tags, MOVE_LINK_TAG) != -1)
+            if (Array.IndexOf(_session.ConnectionInfo.Tags, tag) != -1)
             {
                 return;
             }
-            var newTags = _session.ConnectionInfo.Tags.Concat(new[] { MOVE_LINK_TAG }).ToArray();
+            var newTags = _session.ConnectionInfo.Tags.Concat(new[] { tag }).ToArray();
             _session.ConnectionInfo.UpdateConnectionOptions(newTags);
+        }
+
+        public void SendBouncePacket(IEnumerable<string> tags, Dictionary<string, string> dataString, Dictionary<string, int> dataInt, Dictionary<string, float> dataFloat)
+        {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
+            var data = new Dictionary<string, JToken>();
+            foreach (var kvp in dataString)
+            {
+                var key = kvp.Key;
+                var valueString = kvp.Value;
+                data.Add(key, valueString);
+            }
+            foreach (var kvp in dataInt)
+            {
+                var key = kvp.Key;
+                var valueInt = kvp.Value;
+                data.Add(key, valueInt);
+            }
+            foreach (var kvp in dataFloat)
+            {
+                var key = kvp.Key;
+                var valueFloat = kvp.Value;
+                data.Add(key, valueFloat);
+            }
+
+            SendBouncePacket(tags, data);
         }
 
         public void SendBouncePacket(IEnumerable<string> tags, Dictionary<string, JToken> data)

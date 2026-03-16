@@ -5,9 +5,9 @@
 		<Nullable>disable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>KaitoKid</Authors>
-		<AssemblyVersion>3.1.7</AssemblyVersion>
-		<FileVersion>3.1.7</FileVersion>
-		<Version>3.1.7</Version>
+        <AssemblyVersion>3.1.11</AssemblyVersion>
+        <FileVersion>3.1.11</FileVersion>
+        <Version>3.1.11</Version>
 		<Description>.NET library for Archipelago Item Sprites</Description>
 		<PackageProjectUrl>https://github.com/agilbert1412/ArchipelagoUtilities/blob/main/README.md</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -46,4 +46,10 @@
 	    <Pack>True</Pack>
 	  </None>
 	</ItemGroup>
+
+    <Target Name="Copy nuget to release folder" AfterTargets="Pack">
+        <Message Text="Copying the nuget package to the release folder" Importance="High" />
+        <Copy SourceFiles="$(OutputPath)KaitoKid.ArchipelagoUtilities.AssetDownloader.$(Version).nupkg" DestinationFolder="..\..\Release" ContinueOnError="false" />
+        <Message Text="Copied nuget package" Importance="High" />
+    </Target>
 </Project>

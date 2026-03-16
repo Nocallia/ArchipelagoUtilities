@@ -1,4 +1,6 @@
-﻿namespace KaitoKid.ArchipelagoUtilities.Net.Client
+﻿using System.Collections.Generic;
+
+namespace KaitoKid.ArchipelagoUtilities.Net.Client
 {
     public class ArchipelagoConnectionInfo
     {
@@ -7,6 +9,7 @@
         public string SlotName { get; private set; }
         public bool? DeathLink { get; set; }
         public string Password { get; private set; }
+        public List<string> ConnectionTags { get; set; }
 
         public ArchipelagoConnectionInfo(string hostUrl, int port, string slotName, bool? deathLink, string password = null)
         {
@@ -15,6 +18,7 @@
             SlotName = slotName;
             DeathLink = deathLink;
             Password = password;
+            ConnectionTags = new List<string>();
         }
     }
 }

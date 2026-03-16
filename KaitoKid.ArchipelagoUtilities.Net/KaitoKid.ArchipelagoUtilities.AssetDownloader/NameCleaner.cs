@@ -15,7 +15,7 @@ namespace KaitoKid.ArchipelagoUtilities.AssetDownloader
                 return string.Empty;
             }
 
-            var charsToIgnore = new string[] { " ", "_", ":", "'" };
+            var charsToIgnore = new string[] { " ", "_", ":", "'", "<", ">" };
             name = name.ToLower();
             foreach (var charToIgnore in charsToIgnore)
             {
