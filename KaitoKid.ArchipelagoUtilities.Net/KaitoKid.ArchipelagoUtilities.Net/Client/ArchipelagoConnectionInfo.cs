@@ -9,7 +9,7 @@ namespace KaitoKid.ArchipelagoUtilities.Net.Client
         public string SlotName { get; private set; }
         public bool? DeathLink { get; set; }
         public string Password { get; private set; }
-        public List<string> ConnectionTags { get; set; }
+        public HashSet<string> ConnectionTags { get; set; }
 
         public ArchipelagoConnectionInfo(string hostUrl, int port, string slotName, bool? deathLink, string password = null)
         {
@@ -18,7 +18,7 @@ namespace KaitoKid.ArchipelagoUtilities.Net.Client
             SlotName = slotName;
             DeathLink = deathLink;
             Password = password;
-            ConnectionTags = new List<string>();
+            ConnectionTags = new HashSet<string>();
         }
     }
 }

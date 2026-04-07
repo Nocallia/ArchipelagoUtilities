@@ -94,7 +94,7 @@ namespace KaitoKid.ArchipelagoUtilities.Net.Client
                     tags.Add("DeathLink");
                 }
 
-                tags.AddRange(connectionInfo.ConnectionTags ?? new List<string>());
+                tags.AddRange(connectionInfo.ConnectionTags ?? new HashSet<string>());
                 tags = tags.Distinct().ToList();
                 result = _session.TryConnectAndLogin(GameName, _connectionInfo.SlotName, itemsHandling, apVersion, tags.ToArray(), null, _connectionInfo.Password);
             }
